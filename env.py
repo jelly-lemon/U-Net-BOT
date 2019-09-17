@@ -5,6 +5,9 @@ DATA_DIR = r'D:\2-ITK-SNAP\data'
 # TODO 用来训练的原始CT图像文件夹路径
 TRAIN_IMAGES_DIR = os.path.join(DATA_DIR, 'train', 'images')
 
+# 处理后的原始CT图像文件夹路径
+TRAIN_PROCESSED_IMAGES_DIR = os.path.join(DATA_DIR, 'train', 'processed_images')
+
 # TODO 用来训练的人工标注CT图像文件夹路径
 TRAIN_MASKS_DIR = os.path.join(DATA_DIR, 'train', 'masks')
 
