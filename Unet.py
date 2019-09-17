@@ -1,11 +1,15 @@
 from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Dropout
 from keras.models import Model
+from backbone import get_backbone
 
 
-def UNet(input_size=(512, 512, 1)):
+def Unet(input_size=(512, 512, 1), backbone="resnet50"):
     input = Input(input_size)
 
-    conv1 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(input)
+    backbone = get_backbone(backbone=backbone, input=input, include_top=False)
+
+    print(backbone.shape)
+    conv1 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(backbone)
     conv2 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(conv1)
     dp1 = Dropout(rate=0.5)(conv2)
     mp1 = MaxPooling2D()(dp1)
