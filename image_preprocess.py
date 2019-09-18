@@ -12,9 +12,9 @@ def adjustLevelAndWindow():
         # 读取图片
         img_path = os.path.join(env.TRAIN_IMAGES_DIR, file_name)
         mha_img = sitk.ReadImage(img_path)
-        img_arr = sitk.GetArrayFromImage(mha_img)  # ndarray类型
+        img_arr = sitk.GetArrayFromImage(mha_img)  # ndarray类型，每个数据的type是什么呢？
 
-        # 调整窗位窗宽（意义是什么？）
+        # 调整窗位窗宽
         level = 50  # 窗位
         window = 256  # 窗宽
         # 窗位窗宽的另一种说法
@@ -41,19 +41,18 @@ def adjustLevelAndWindow():
 def filterMasks():
     # 读入人工标注的CT图像
     masks_names = os.listdir(env.TRAIN_MASKS_DIR)
-    # for file_name in masks_names:
-    #     # 读取图片
-    #     img_path = os.path.join(env.TRAIN_MASKS_DIR, file_name)
-    #     print(img_path)
-    #     mha_img = sitk.ReadImage(img_path)
-    #
-    #     # TODO 滤波平滑处理
-    #
-    #
-    #     # 保存图片
-    #     sitk.WriteImage(mha_img, os.path.join(r'D:\2-ITK-SNAP\data\train\processed_masks', file_name))
-    #
-    #     break
+    for file_name in masks_names:
+        # 读取图片
+        img_path = os.path.join(env.TRAIN_MASKS_DIR, file_name)
+        print(img_path)
+        mha_img = sitk.ReadImage(img_path)
+
+        # TODO 滤波平滑处理
+
+
+        # 保存图片
+        sitk.WriteImage(mha_img, os.path.join(r'D:\2-ITK-SNAP\data\train\processed_masks', file_name))
+
 
 
 

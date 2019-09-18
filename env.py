@@ -1,4 +1,7 @@
 import os
+"""有没有一个方法，代码自动判断是哪一台电脑，然后根据电脑加载不同的值？"""
+#COMPUTER = 'lm'
+
 # TODO 数据的根目录
 DATA_DIR = r'D:\2-ITK-SNAP\data'
 
