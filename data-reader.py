@@ -37,7 +37,7 @@ def get_files(description, path):
     file_list = os.listdir(path)
     file_list.sort()
 
-    pbar = tqdm(file_list[0:3])
+    pbar = tqdm(file_list)
     pbar.set_description(description)
     array_list = None
     for file in pbar:
