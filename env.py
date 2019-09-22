@@ -1,15 +1,19 @@
 import os
+import platform
+"""有没有一个方法，代码自动判断是哪一台电脑，然后根据电脑加载不同的值？"""
+#COMPUTER = 'lm'
+
 # TODO 数据的根目录
 DATA_DIR = r'D:\2-ITK-SNAP\data'
 
 # TODO 用来训练的原始CT图像文件夹路径
-TRAIN_IMAGES_DIR = "../CT_images/MHA_cut"
+TRAIN_IMAGES_DIR = ("../CT_images/MHA_cut" if platform.system() == "Windows" else "your data path!")
 
 # 处理后的原始CT图像文件夹路径
 TRAIN_PROCESSED_IMAGES_DIR = os.path.join(DATA_DIR, 'train', 'processed_images')
 
 # TODO 用来训练的人工标注CT图像文件夹路径
-TRAIN_MASKS_DIR = "../CT_images/mask_cut"
+TRAIN_MASKS_DIR = ("../CT_images/mask_cut" if platform.system() == "Windows" else "your data path!")
 
 # TODO 处理后（调整窗位窗宽、平滑滤波）的人工标注CT图像文件夹路径
 TRAIN_PROCESSED_MASKS_DIR = os.path.join(DATA_DIR, 'train', 'processed_masks')

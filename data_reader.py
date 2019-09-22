@@ -7,6 +7,19 @@ from tqdm import tqdm
 import SimpleITK as sitk
 import numpy as np
 
+# TODO 获取待预测数据
+def getPredictData():
+    return
+
+
+# TODO 读取训练数据
+def getTrainData():
+    """先进入人工标注文件夹 -> 看有哪些已经标记好了的CT图像，读入所有数据 ->
+    根据人工标记好了的CT图像名称去读取原始CT图像 -> 读入原始CT图像 -> 把训练数据组合成一个 tensor
+
+    """
+    return
+
 
 class ReadThread(threading.Thread):
     def __init__(self, description, path):

@@ -1,19 +1,31 @@
+"""获取unet模型
+"""
 from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Dropout
 from keras.models import Model
-from backbone import get_backbone
+from keras.models import load_model
 
 
-def unet(input_size=(512, 512, 1), backbone="resnet50"):
-    input = Input(input_size)
+def get_trained_unet():
+    model = load_model("*.h5")
+    return model
 
-    conv1 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(input)
-    conv2 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(conv1)
-    dp1 = Dropout(rate=0.5)(conv2)
-    mp1 = MaxPooling2D()(dp1)
 
-    conv3 = Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu")(mp1)
-    conv4 = Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu")(conv3)
-    dp2 = Dropout(rate=0.5)(conv4)
+def get_untrained_unet(input_size=(512, 512, 1)):
+    """获取unet模型
+
+    # Arguments
+        input_size:一张图片的大小，也就是一个输入数据
+    """
+    input = Input(input_size)  # 返回一个tensor
+
+    conv1 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(input)  # 卷积1
+    conv2 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(conv1)  # 卷积2
+    dp1 = Dropout(rate=0.5)(conv2)  # 随机失活1
+    mp1 = MaxPooling2D()(dp1)  # 最大池化1
+
+    conv3 = Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu")(mp1)  # 卷积3
+    conv4 = Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu")(conv3)  # 卷积4
+    dp2 = Dropout(rate=0.5)(conv4)  # 随机失活2
     mp2 = MaxPooling2D()(dp2)
 
     conv5 = Conv2D(filters=256, kernel_size=(3, 3), padding="same", activation="relu")(mp2)

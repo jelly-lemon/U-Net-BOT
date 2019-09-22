@@ -1,6 +1,6 @@
-import reader
+import data_reader
 import env
-from Unet import Unet
+from Unet import get_untrained_unet
 from keras.callbacks import LearningRateScheduler
 from keras import optimizers
 from keras import regularizers
@@ -30,14 +30,16 @@ def main():
     先进入人工标注文件夹 -> 看有哪些已经标记好了的CT图像，读入所有数据 ->
     根据人工标记好了的CT图像名称去读取原始CT图像 -> 读入原始CT图像 -> 把训练数据组合成一个 tensor
     """
-    image_array, mask_array = reader.read_file([env.TRAIN_IMAGES_DIR, env.TRAIN_PROCESSED_MASKS_DIR])
-
+    image_array, mask_array = data_reader.read_file_2_array([env.TRAIN_IMAGES_DIR, env.TRAIN_PROCESSED_MASKS_DIR])
+    # 归一化
+    image_array = image_array / 255
+    mask_array = image_array / 255
 
     # TODO 开始训练
     """
     训练时要对数据进行分块，拿一部分出来作为验证集
     """
-    model = Unet()
+    model = get_untrained_unet()
     lr_scheduler = LearningRateScheduler(learning_rate_scheduler)
     model.compile(optimizers="adam", loss="binary_crossentropy", metrics=[metrics.dice_coef])
     model.fit(x=image_array, y=mask_array, validation_split=0.2, verbose=1, callbacks=[lr_scheduler],
