@@ -1,4 +1,5 @@
-"""获取unet模型
+"""
+获取unet模型
 """
 from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Dropout
 from keras.models import Model
@@ -6,15 +7,21 @@ from keras.models import load_model
 
 
 def get_trained_unet():
+    """
+    获取已经训练好的、之前保存的模型
+
+    :return:训练好的模型
+    """
     model = load_model("*.h5")
     return model
 
 
 def get_untrained_unet(input_size=(512, 512, 1)):
-    """获取unet模型
+    """
+    获取unet模型
 
-    # Arguments
-        input_size:一张图片的大小，也就是一个输入数据
+    :param input_size: 一张图片的大小，也就是一个输入数据
+    :return: 创建的模型
     """
     input = Input(input_size)  # 返回一个tensor
 
