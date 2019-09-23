@@ -21,8 +21,10 @@ def adjust_img_level_window():
         mha_img = sitk.ReadImage(img_path)
         img_arr = sitk.GetArrayFromImage(mha_img)  # ndarray类型，每个数据的type是什么呢？
 
-        # 调整窗位窗宽（pixel intensity < minimum的变成纯黑，pixel intensity > maximux的变成纯白）
-        # 相当于去噪？
+        """
+        调整窗位窗宽（pixel intensity < minimum的变成纯黑，pixel intensity > maximux的变成纯白）
+        相当于去噪？
+        """
         level = 50  # 窗位
         window = 350  # 窗宽
         window_minimum = level - window / 2  # 设定窗位窗宽后，这就是对应的最小强度值和最大强度值
@@ -53,7 +55,6 @@ def filter_masks():
 
 
 
-adjust_img_level_window()
 
 
 

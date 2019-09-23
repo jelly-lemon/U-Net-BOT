@@ -1,52 +1,50 @@
+"""
+直接运行该文件训练模型
+"""
+from segmentation_models.losses import cce_dice_loss    # 损失函数
+from segmentation_models.metrics import dice_score, iou_score, jaccard_score, f1_score, f2_score # 衡量指标
+from keras.metrics import binary_accuracy
 import data_reader
+import Unet
 import env
-from Unet import get_untrained_unet
-from keras.callbacks import LearningRateScheduler
-from keras import optimizers
-from keras import regularizers
-from keras import backend as K
-import metrics
+from keras.callbacks import ModelCheckpoint
 import argparse
 import os
+import platform
 
+# 获取运行时参数
+parser = argparse.ArgumentParser(description="train argument")
+parser.add_argument("-gpu", type=str, default="0")
+args = parser.parse_args()
 
-def learning_rate_scheduler(epoch, model):
-    if epoch != 0 and epoch % 5 == 0:
-        lr = K.get_value(model.optimizer.lr)
-        K.set_value(model.optimizer.lr, lr / 10)
-        print(lr)
-
-    return K.get_value(model.optimizer.lr)
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-gpu", type=str, default=3)
-    args = parser.parse_args()
+# 运行时使用的GPU
+if platform.system() != "Windows":
+    print("gpu:", args.gpu)
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-    # TODO 读取训练数据
-    """
-    先进入人工标注文件夹 -> 看有哪些已经标记好了的CT图像，读入所有数据 ->
-    根据人工标记好了的CT图像名称去读取原始CT图像 -> 读入原始CT图像 -> 把训练数据组合成一个 tensor
-    """
-    image_array, mask_array = data_reader.read_file_2_array([env.TRAIN_IMAGES_DIR, env.TRAIN_PROCESSED_MASKS_DIR])
-    # 归一化
-    image_array = image_array / 255
-    mask_array = image_array / 255
+# 一些超参数
+batch_size = 2
+epochs = 1
 
-    # TODO 开始训练
-    """
-    训练时要对数据进行分块，拿一部分出来作为验证集
-    """
-    model = get_untrained_unet()
-    lr_scheduler = LearningRateScheduler(learning_rate_scheduler)
-    model.compile(optimizers="adam", loss="binary_crossentropy", metrics=[metrics.dice_coef])
-    model.fit(x=image_array, y=mask_array, validation_split=0.2, verbose=1, callbacks=[lr_scheduler],
-              batch_size=5, epochs=1)
+# 获取数据
+x_train, y_train = data_reader.get_train_data([env.TRAIN_IMAGES_DIR, env.TRAIN_MASKS_DIR])
 
-    # TODO 保存模型
+# 进行归一化，归一化到区间[0, 1]
+x_train = x_train / 255.0
+y_train = y_train / 255.0
 
+# 获取未训练的模型
+unet_model = Unet.get_untrained_unet()
 
-if __name__ == "__main__":
-    main()
+# 设置模型相关参数
+unet_model.compile(optimizer='Adam',
+                   loss='binary_crossentropy',
+                   metrics=['acc'])
+unet_model.summary()    # 打印到控制台看一下模型结构
+checkpoint = ModelCheckpoint(filepath=env.MODEL_SAVE_DIR, monitor='acc', verbose=1, save_best_only=True, mode='max')
+
+# 训练时要对数据进行分块，拿一部分出来作为验证集，训练完成后模型会自动保存到指定的路径中
+history = unet_model.fit(x=x_train, y=y_train, batch_size=batch_size, callbacks=[checkpoint],
+                         validation_split=0.2,
+                         epochs=epochs,
+                         shuffle=False)
