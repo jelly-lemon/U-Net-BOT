@@ -29,7 +29,21 @@ class ReadThread(threading.Thread):
         self.array = None
 
     def run(self):
-        self.array = get_files(self.description, self.path)
+        file_list = os.listdir(self.path)
+        file_list.sort()
+
+        pbar = tqdm(file_list)
+        pbar.set_description(self.description)
+        array_list = None
+        for file in pbar:
+            array = sitk.GetArrayFromImage(sitk.ReadImage(os.path.join(self.path, file)))
+
+            if array_list is None:
+                array_list = array[:, :, :, np.newaxis]
+            else:
+                array_list = np.concatenate([array_list, array[:, :, :, np.newaxis]], axis=0)
+
+        self.array = array_list
 
     def get_array(self):
         try:
@@ -44,24 +58,6 @@ class ReadThread(threading.Thread):
 
         except Exception:
             return None
-
-
-def get_files(description, path):
-    file_list = os.listdir(path)
-    file_list.sort()
-
-    pbar = tqdm(file_list)
-    pbar.set_description(description)
-    array_list = None
-    for file in pbar:
-        array = sitk.GetArrayFromImage(sitk.ReadImage(os.path.join(path, file)))
-
-        if array_list is None:
-            array_list = array[:, :, :, np.newaxis]
-        else:
-            array_list = np.concatenate([array_list, array[:, :, :, np.newaxis]], axis=0)
-
-    return array_list
 
 
 def read_file_2_array(paths=[]):
