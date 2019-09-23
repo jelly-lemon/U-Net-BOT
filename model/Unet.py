@@ -1,6 +1,8 @@
 """
 获取unet模型
 """
+import time
+
 from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Dropout
 from keras.models import Model
 from keras.models import load_model
@@ -76,6 +78,7 @@ def get_untrained_unet(input_size=(512, 512, 1)):
 
     output = Conv2D(filters=1, kernel_size=(3, 3), padding="same", activation="sigmoid")(conv19)
 
-    model = Model(inputs=input, outputs=output)
+    current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    model = Model(name="UNet " + current_time, inputs=input, outputs=output)    # 该模型的名字为创建时的时间
 
     return model

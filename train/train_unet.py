@@ -1,11 +1,8 @@
 """
 直接运行该文件训练模型
 """
-from segmentation_models.losses import cce_dice_loss    # 损失函数
-from segmentation_models.metrics import dice_score, iou_score, jaccard_score, f1_score, f2_score # 衡量指标
-from keras.metrics import binary_accuracy
 import data_reader
-import Unet
+from model import Unet
 import env
 from keras.callbacks import ModelCheckpoint
 import argparse
@@ -19,7 +16,7 @@ args = parser.parse_args()
 
 # 运行时使用的GPU
 if platform.system() != "Windows":
-    print("gpu:", args.gpu)
+    print("using gpu:", args.gpu)
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
 # 一些超参数

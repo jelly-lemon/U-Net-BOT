@@ -14,7 +14,7 @@ import platform
 """
 
 # 数据的根目录
-DATA_DIR = (r'D:\2-ITK-SNAP\data' if platform.system() == "Windows" else "/home/data_new/zhangyongqing/lm/data")
+DATA_DIR = (r'D:\2-ITK-SNAP\data' if platform.system() == "Windows" else "/home/data_new/zhangyongqing/model/data")
 
 # 用来训练的原始CT图像文件夹路径
 TRAIN_IMAGES_DIR = os.path.join(DATA_DIR, 'train', 'images')

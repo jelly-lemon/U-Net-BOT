@@ -7,15 +7,22 @@ from tqdm import tqdm
 import SimpleITK as sitk
 import numpy as np
 
-# TODO 获取待预测数据
-def get_predict_data():
-    return
 
-
-
+def get_predict_data(path: str):
+    """
+    获取待预测的图像数据，还有文件名元组
+    :return:待预测的图像数据，还有文件名列表 x_predict, file_name_list
+    """
+    x_predict = get_data([path])
+    file_name_list = os.listdir(path)
+    file_name_list.sort()   # 进行排序
+    return x_predict, file_name_list
 
 
 class ReadThread(threading.Thread):
+    """
+    读取文件的线程类
+    """
     def __init__(self, description, path):
         threading.Thread.__init__(self)
         self.description = description
@@ -43,13 +50,12 @@ class ReadThread(threading.Thread):
 def get_files(description, path):
     """
     获取指定路径下的文件，并转化为ndarray
-
     :param description:该路径描述，运行时打印出来给人看的
     :param path:指定的路径
     :return:所有文件组成的ndarray
     """
     file_list = os.listdir(path)
-    file_list.sort()
+    file_list.sort()    # 对文件列表进行了排序
 
     pbar = tqdm(file_list)
     pbar.set_description(description)
@@ -65,11 +71,10 @@ def get_files(description, path):
     return array_list
 
 
-def get_train_data(paths=[]):
+def get_data(paths: list):
     """
     利用多线程，将指定路径下的mha文件读取到内存，并转化为ndarray
     一个路径使用一个线程
-
     :param paths:路径列表
     :return:每个路径下的所有mha文件组成的ndarray
     """
@@ -90,3 +95,14 @@ def get_train_data(paths=[]):
     # 一个路径对应一个线程。一个线程会读取对应路径下的所有mha文件并转化为ndarray
     for ta in threads:
         yield ta.get_array()
+
+
+def get_train_data(paths: list):
+    """
+    获取训练数据 x_train, y_train
+    :param paths: 路径列表。第一个路径为图像路径，第二个为标注路径
+    :return:返回训练数据 x_train, y_train
+    """
+    x_train, y_train = get_data(paths)
+    return x_train, y_train
+
