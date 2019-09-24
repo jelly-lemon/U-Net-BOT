@@ -47,7 +47,7 @@ class ReadThread(threading.Thread):
             return None
 
 
-def get_files(description, path):
+def get_files(description: str, path: str):
     """
     获取指定路径下的文件，并转化为ndarray
     :param description:该路径描述，运行时打印出来给人看的

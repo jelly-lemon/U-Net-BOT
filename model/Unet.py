@@ -11,17 +11,16 @@ from keras.models import load_model
 def get_trained_unet():
     """
     获取已经训练好的、之前保存的模型
-
     :return:训练好的模型
     """
+    # TODO 如果不存在的话应该提示一下
     model = load_model("*.h5")
     return model
 
 
 def get_untrained_unet(input_size=(512, 512, 1)):
     """
-    获取unet模型
-
+    获取未训练的unet模型
     :param input_size: 一张图片的大小，也就是一个输入数据
     :return: 创建的模型
     """

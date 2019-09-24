@@ -25,15 +25,18 @@ TRAIN_MASKS_DIR = os.path.join(DATA_DIR, 'train', 'masks')
 # 模型保存路径
 MODEL_SAVE_DIR = os.path.join(DATA_DIR, 'models')
 
+# 待预测的CT图像文件夹路径
+PREDICT_IMAGES_DIR = os.path.join(DATA_DIR, 'predict', 'images')
+
+# 预测结果输出路径
+PREDICT_OUTPUT_DIR = os.path.join(DATA_DIR, 'predict', 'results')
+
+# 做测试用的路径
+TEST_DIR = os.path.join(DATA_DIR, 'train', 'test')
+
 # TODO 处理后的原始CT图像文件夹路径
 TRAIN_PROCESSED_IMAGES_DIR = os.path.join(DATA_DIR, 'train', 'processed_images')
 
 # TODO 处理后（调整窗位窗宽、平滑滤波）的人工标注CT图像文件夹路径
 TRAIN_PROCESSED_MASKS_DIR = os.path.join(DATA_DIR, 'train', 'processed_masks')
-
-# TODO 待预测的CT图像文件夹路径
-PREDICT_IMAGES_DIR = ''
-
-# TODO 预测结果输出路径
-PREDICT_OUTPUT_DIR = ''
 
