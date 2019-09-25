@@ -24,7 +24,7 @@ def get_untrained_unet(input_size=(512, 512, 1)):
     :param input_size: 一张图片的大小，也就是一个输入数据
     :return: 创建的模型
     """
-    input = Input(input_size)  # 返回一个tensor
+    input = Input(input_size)  # 返回一个tensor，输入层
 
     conv1 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(input)  # 卷积1
     conv2 = Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu")(conv1)  # 卷积2
@@ -75,6 +75,7 @@ def get_untrained_unet(input_size=(512, 512, 1)):
 
     conv19 = Conv2D(filters=2, kernel_size=(3, 3), padding="same", activation="relu")(conv18)
 
+    # 输出大小为(512, 512, 1)，也就是说有512*512个值，把这个值分别输入sigmoid激活函数，得到一个新的值
     output = Conv2D(filters=1, kernel_size=(3, 3), padding="same", activation="sigmoid")(conv19)
 
     current_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))

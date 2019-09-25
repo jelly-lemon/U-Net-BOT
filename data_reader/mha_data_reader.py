@@ -1,5 +1,6 @@
 # coding: utf-8
-"""用来获取训练数据、验证数据
+"""
+用来获取mha文件，训练数据、验证数据
 """
 import os
 import threading

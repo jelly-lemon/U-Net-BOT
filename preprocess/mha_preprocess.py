@@ -6,7 +6,7 @@
 import SimpleITK as sitk
 import os
 import env
-
+import cv2
 
 def adjust_img_level_window():
     """
@@ -39,12 +39,15 @@ def adjust_img_level_window():
 
 # TODO 对人工标注图像进行滤波处理
 def filter_masks():
+    """
+    对人工标注进行滤波平滑处理
+    :return:无
+    """
     # 读入人工标注的CT图像
     masks_names = os.listdir(env.TRAIN_MASKS_DIR)
     for file_name in masks_names:
         # 读取图片
         img_path = os.path.join(env.TRAIN_MASKS_DIR, file_name)
-        print(img_path)
         mha_img = sitk.ReadImage(img_path)
 
         # TODO 滤波平滑处理
@@ -52,6 +55,12 @@ def filter_masks():
 
         # 保存图片
         sitk.WriteImage(mha_img, os.path.join(r'D:\2-ITK-SNAP\data\train\processed_masks', file_name))
+
+
+# TODO 高斯平滑滤波处理
+def gauss_bilateral_filtering():
+    #cv2.bilateralFilter()
+    return
 
 
 

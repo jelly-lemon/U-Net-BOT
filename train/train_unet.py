@@ -1,7 +1,7 @@
 """
 直接运行该文件训练模型
 """
-import data_reader
+from data_reader import mha_data_reader
 from model import Unet
 import env
 from keras.callbacks import ModelCheckpoint
@@ -32,7 +32,7 @@ batch_size = 2
 epochs = 1
 
 # 获取训练数据
-x_train, y_train = data_reader.get_train_data([env.TRAIN_IMAGES_DIR, env.TRAIN_MASKS_DIR])
+x_train, y_train = mha_data_reader.get_train_data([env.TRAIN_IMAGES_DIR, env.TRAIN_MASKS_DIR])
 
 # 进行归一化，归一化到区间[0, 1]
 x_train = x_train / 255.0
